@@ -1,0 +1,30 @@
+[
+    {
+        "ParameterKey": "EnvironmentName",
+        "ParameterValue": "UdacityChallenge2-Solution"
+    },
+    {
+        "ParameterKey": "DBInstanceID",
+        "ParameterValue": "po-elasticcache-db-instance"
+    },
+    {
+        "ParameterKey": "DBName",
+        "ParameterValue": "po-elasticcache-db"
+    },
+    {
+        "ParameterKey": "DBInstanceClass",
+        "ParameterValue": "db.t2.micro"
+    },
+    {
+        "ParameterKey": "DBAllocatedStorage",
+        "ParameterValue": "50"
+    },
+    {
+        "ParameterKey": "DBUsername",
+        "ParameterValue": "dbadmin"
+    },
+    {
+        "ParameterKey": "DBPassword",
+        "ParameterValue": "dbadmin@2021"
+    }
+]

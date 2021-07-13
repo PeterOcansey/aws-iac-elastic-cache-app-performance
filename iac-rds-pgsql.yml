@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Peter Ocansey | A Cloud Guru Challenge (Improve application performance using Amazon ElastiCache) - This template deploys RDS Postgres using Infrastracture As Code
+
+
+Parameters:
+  
+  DBInstanceID:
+    Default: mydbinstance
+    Description: My database instance
+    Type: String
+
+  DBName:
+    Default: mydb
+    Description: My database
+    Type: String
+  
+  DBInstanceClass:
+    Default: db.t2.micro
+    Description: DB instance class
+    Type: String
+  
+  DBAllocatedStorage:
+    Default: '50'
+    Description: The size of the database (GiB)
+    Type: Number
+  
+  DBUsername:
+    NoEcho: 'true'
+    Description: Username for PostgreSQL database access
+    Type: String
+
+  DBPassword:
+    NoEcho: 'true'
+    Description: Password PostgreSQL database access
+    Type: String
+
+Resources:
+    DBElasticCacheInstance:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      DBInstanceIdentifier: !Ref DBInstanceID
+      DBName: !Ref DBName
+      DBInstanceClass: !Ref DBInstanceClass
+      AllocatedStorage: !Ref DBAllocatedStorage
+      Engine: postgres
+      EngineVersion: 8.0.16
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
+      MonitoringInterval: '60'
+      MonitoringRoleArn: 'arn:aws:iam::123456789012:role/rds-monitoring-role'
