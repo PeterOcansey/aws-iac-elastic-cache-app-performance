@@ -1,7 +1,7 @@
 [
     {
         "ParameterKey": "EnvironmentName",
-        "ParameterValue": "UdacityChallenge2-Solution"
+        "ParameterValue": "AcloudChallenge-Solution"
     },
     {
         "ParameterKey": "DBInstanceID",
@@ -9,7 +9,7 @@
     },
     {
         "ParameterKey": "DBName",
-        "ParameterValue": "po-elasticcache-db"
+        "ParameterValue": "poelasticcachedb"
     },
     {
         "ParameterKey": "DBInstanceClass",
@@ -25,6 +25,6 @@
     },
     {
         "ParameterKey": "DBPassword",
-        "ParameterValue": "dbadmin@2021"
+        "ParameterValue": "dbadmin2021"
     }
 ]

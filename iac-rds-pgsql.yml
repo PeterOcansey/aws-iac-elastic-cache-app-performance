@@ -3,6 +3,10 @@ Description: Peter Ocansey | A Cloud Guru Challenge (Improve application perform
 
 
 Parameters:
+
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resources
+    Type: String
   
   DBInstanceID:
     Default: mydbinstance
@@ -34,16 +38,43 @@ Parameters:
     Description: Password PostgreSQL database access
     Type: String
 
+
+
 Resources:
-    DBElasticCacheInstance:
+  
+  DBWebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP access via port 80 and SSH access
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: 0.0.0.0/0
+  
+  DBSecurityGroup:
+    Type: AWS::RDS::DBSecurityGroup
+    Properties:
+      DBSecurityGroupIngress:
+        EC2SecurityGroupName:
+          Ref: DBWebServerSecurityGroup
+      GroupDescription: Frontend Access
+
+  DBElasticCacheInstance:
     Type: 'AWS::RDS::DBInstance'
     Properties:
       DBInstanceIdentifier: !Ref DBInstanceID
       DBName: !Ref DBName
       DBInstanceClass: !Ref DBInstanceClass
       AllocatedStorage: !Ref DBAllocatedStorage
+      DBSecurityGroups:
+      - Ref: DBSecurityGroup
       Engine: postgres
-      EngineVersion: 8.0.16
+      EngineVersion: 12.7
       MasterUsername: !Ref DBUsername
       MasterUserPassword: !Ref DBPassword
       MonitoringInterval: '60'
