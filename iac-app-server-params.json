@@ -1,0 +1,14 @@
+[
+    {
+        "ParameterKey": "EnvironmentName",
+        "ParameterValue": "AcloudChallenge-Solution"
+    },
+    {
+        "ParameterKey": "AMItoUse",
+        "ParameterValue": "ami-03d5c68bab01f3496"
+    },
+    {
+        "ParameterKey": "KeyToUse",
+        "ParameterValue": "WebEc2Key"
+    }
+]

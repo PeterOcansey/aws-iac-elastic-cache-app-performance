@@ -26,5 +26,13 @@
     {
         "ParameterKey": "DBPassword",
         "ParameterValue": "dbadmin2021"
+    },
+    {
+        "ParameterKey": "AMItoUse",
+        "ParameterValue": "ami-0800fc0fa715fdcfe"
+    },
+    {
+        "ParameterKey": "KeyToUse",
+        "ParameterValue": "WebEc2Key"
     }
 ]
