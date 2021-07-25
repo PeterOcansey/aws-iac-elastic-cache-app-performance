@@ -5,11 +5,11 @@
     },
     {
         "ParameterKey": "DBInstanceID",
-        "ParameterValue": "po-elasticcache-db-instance"
+        "ParameterValue": "po-elasticcache-db-instance2"
     },
     {
         "ParameterKey": "DBName",
-        "ParameterValue": "poelasticcachedb"
+        "ParameterValue": "poelasticcachedb2"
     },
     {
         "ParameterKey": "DBInstanceClass",
@@ -26,13 +26,5 @@
     {
         "ParameterKey": "DBPassword",
         "ParameterValue": "dbadmin2021"
-    },
-    {
-        "ParameterKey": "AMItoUse",
-        "ParameterValue": "ami-0800fc0fa715fdcfe"
-    },
-    {
-        "ParameterKey": "KeyToUse",
-        "ParameterValue": "WebEc2Key"
     }
 ]

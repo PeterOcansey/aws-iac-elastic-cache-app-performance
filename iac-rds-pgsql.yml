@@ -42,7 +42,7 @@ Parameters:
 
 Resources:
   
-  DBWebServerSecurityGroup:
+  WebServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable HTTP access via port 80 and SSH access
@@ -61,10 +61,10 @@ Resources:
     Properties:
       DBSecurityGroupIngress:
         EC2SecurityGroupName:
-          Ref: DBWebServerSecurityGroup
+          Ref: WebServerSecurityGroup
       GroupDescription: Frontend Access
 
-  DBElasticCacheInstance:
+  DBServerInstance:
     Type: 'AWS::RDS::DBInstance'
     Properties:
       DBInstanceIdentifier: !Ref DBInstanceID
@@ -79,3 +79,24 @@ Resources:
       MasterUserPassword: !Ref DBPassword
       MonitoringInterval: '60'
       MonitoringRoleArn: 'arn:aws:iam::123456789012:role/rds-monitoring-role'
+
+
+Outputs: 
+
+    DBEndpointURL:
+        Description: The public url to database instance
+        Value: !GetAtt DBServerInstance.Endpoint.Address
+        Export:
+          Name: !Sub ${EnvironmentName}-DBEndpointURL
+
+    DBPortNumber:
+        Description: The port number to database instance
+        Value: !GetAtt DBServerInstance.Endpoint.Port
+        Export:
+          Name: !Sub ${EnvironmentName}-DBPortNumber
+    
+    AppServerSecurityGroupID:
+        Description: The security group for our app server
+        Value: !GetAtt WebServerSecurityGroup.GroupId
+        Export:
+          Name: !Sub ${EnvironmentName}-AppServerSecurityGroupID
