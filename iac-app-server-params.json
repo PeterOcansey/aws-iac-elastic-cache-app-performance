@@ -10,5 +10,17 @@
     {
         "ParameterKey": "KeyToUse",
         "ParameterValue": "WebEc2Key"
+    },
+    {
+        "ParameterKey": "DBUsername",
+        "ParameterValue": "dbadmin"
+    },
+    {
+        "ParameterKey": "DBPassword",
+        "ParameterValue": "dbadmin2021"
+    },
+    {
+        "ParameterKey": "DBName",
+        "ParameterValue": "poelasticcachedb2"
     }
 ]

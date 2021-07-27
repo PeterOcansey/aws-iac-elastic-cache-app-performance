@@ -15,75 +15,91 @@ Parameters:
   KeyToUse:
     Description: Key to use to connect to our instance
     Type: String
+  
+  DBName:
+    Default: mydb
+    Description: My database
+    Type: String
+
+  DBUsername:
+    NoEcho: 'true'
+    Description: Username for PostgreSQL database access
+    Type: String
+
+  DBPassword:
+    NoEcho: 'true'
+    Description: Password PostgreSQL database access
+    Type: String
 
 
 Resources:
   
-  WebServerSecGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Allow http to our hosts
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: '80'
-        ToPort: '80'
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: tcp
-        FromPort: '22'
-        ToPort: '22'
-        CidrIp: 0.0.0.0/0
-
   ServerInstance: 
     Type: AWS::EC2::Instance
     Properties:
       UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          apt-get -y update
-          apt-get -y install nginx
+        Fn::Base64: !Sub 
+          - |
+            #!/bin/bash
+            apt-get -y update
+            apt-get -y install nginx
 
-          rm /ect/nginx/sites-enable/default
-          rm /etc/nginx/sites-available/default
+            rm /etc/nginx/sites-available/default
 
-          block="/etc/nginx/sites-available/default"
-          tee $block > /dev/null <<EOF
-              server {
-                      listen 80 default_server;
-                      listen [::]:80 default_server;
+            block="/etc/nginx/sites-available/default"
+            tee $block > /dev/null <<EOF
+                server {
+                        listen 80 default_server;
+                        listen [::]:80 default_server;
 
-                      root /var/www/html;
-                      index index.html index.htm;
+                        root /var/www/html;
+                        index index.html index.htm;
 
-                      server_name _;
+                        server_name _;
 
-                      location / {
-                              #try_files $uri $uri/ =404;
-                              proxy_pass         http://127.0.0.1:5000/;
-                              proxy_redirect     off;
-                              proxy_set_header   Host                 $host;
-                              proxy_set_header   X-Real-IP            $remote_addr;
-                              proxy_set_header   X-Forwarded-For      $proxy_add_x_forwarded_for;
-                              proxy_set_header   X-Forwarded-Proto    $scheme;
-                      }
-              }
-          EOF
+                        location / {
+                                #try_files $uri $uri/ =404;
+                                proxy_pass         http://127.0.0.1:5000/;
+                                proxy_redirect     off;
+                                proxy_set_header   Host \$host;
+                                proxy_set_header   X-Real-IP  \$remote_addr;
+                                proxy_set_header   X-Forwarded-For  \$proxy_add_x_forwarded_for;
+                                proxy_set_header   X-Forwarded-Proto  \$scheme;
+                        }
+                }
+            EOF
 
-          ln -s $block /etc/nginx/sites-enabled/
-          nginx -t && service nginx reload
-          apt-get install -y python3
-          apt-get install -y python-configparser
-          apt install -y python3-virtualenv
-          apt-get install -y postgresql-client-12
-          apt-get install -y git
-          cd /home/ubuntu
-          su ubuntu -c "git clone https://github.com/ACloudGuru/elastic-cache-challenge.git"
-          cd elastic-cache-challenge
-          virtualenv --python=/usr/bin/python3 venvs/redischallenge
-          source venvs/redischallenge/bin/activate
-          pip install redis
-          pip install flask
-          pip install psycopg2-binary
-          python3 app.py
+            ln -s $block /etc/nginx/sites-enabled/
+            nginx -t && service nginx reload
+            apt-get install -y python3
+            apt-get install -y python-configparser
+            apt install -y python3-virtualenv
+            apt-get install -y postgresql-client-12
+            apt-get install -y git
+            cd /home/ubuntu
+            su ubuntu -c "git clone https://github.com/ACloudGuru/elastic-cache-challenge.git"
+            
+            sudo rm elastic-cache-challenge/config/database.ini
+            dblock="elastic-cache-challenge/config/database.ini"
+            tee $dblock > /dev/null <<EOF
+              [postgresql]
+              host=${DBEndpoint}
+              database=${DBName}
+              user=${DBUsername}
+              password=${DBPassword}
+            EOF
+            cd /home/ubuntu
+            export PGPASSWORD=${DBPassword}
+            psql -h ${DBEndpoint} -U ${DBUsername} -f /home/ubuntu/elastic-cache-challenge/install.sql ${DBName}
+            cd /home/ubuntu/elastic-cache-challenge
+            virtualenv --python=/usr/bin/python3 venvs/redischallenge
+            source venvs/redischallenge/bin/activate
+            pip install redis
+            pip install flask
+            pip install psycopg2-binary
+            python3 app.py
+          - DBEndpoint:
+              Fn::ImportValue: !Sub ${EnvironmentName}-DBEndpointURL
           
       InstanceType: t3.micro
       ImageId: !Ref AMItoUse
@@ -92,8 +108,9 @@ Resources:
       - DeviceName: "/dev/sdk"
         Ebs:
           VolumeSize: '20'
-      SecurityGroups:
-      - !Ref WebServerSecGroup
+      SecurityGroupIds:
+      - Fn::ImportValue: !Sub "${EnvironmentName}-AppServerSecurityGroupID"
+      
 
 Outputs: 
 
