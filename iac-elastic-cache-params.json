@@ -1,0 +1,14 @@
+[
+    {
+        "ParameterKey": "EnvironmentName",
+        "ParameterValue": "AcloudChallenge-Solution"
+    },
+    {
+        "ParameterKey": "ElasticCacheName",
+        "ParameterValue": "po-redis-elasticcache"
+    },
+    {
+        "ParameterKey": "ElasticCachePort",
+        "ParameterValue": "6379"
+    }
+]

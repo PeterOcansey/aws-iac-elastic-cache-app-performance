@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Peter Ocansey | A Cloud Guru Challenge (Improve application performance using Amazon ElastiCache) - This template deploys Redis Elastic Cache using Infrastracture As Code
+Description: Peter Ocansey | A Cloud Guru Challenge (Improve application performance using Amazon ElastiCache) - This template deploys the python app server using Infrastracture As Code
 
 
 Parameters:

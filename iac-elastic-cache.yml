@@ -7,37 +7,16 @@ Parameters:
   EnvironmentName:
     Description: An environment name that will be prefixed to resources
     Type: String
-  
-  DBInstanceID:
-    Default: mydbinstance
-    Description: My database instance
-    Type: String
 
-  DBName:
-    Default: mydb
-    Description: My database
+  ElasticCacheName:
+    Default: elastic-cache-cluster
+    Description: The elastic cache cluster name
     Type: String
   
-  DBInstanceClass:
-    Default: db.t2.micro
-    Description: DB instance class
-    Type: String
-  
-  DBAllocatedStorage:
-    Default: '50'
-    Description: The size of the database (GiB)
+  ElasticCachePort:
+    Default: '6379'
+    Description: The elastic cache port
     Type: Number
-  
-  DBUsername:
-    NoEcho: 'true'
-    Description: Username for PostgreSQL database access
-    Type: String
-
-  DBPassword:
-    NoEcho: 'true'
-    Description: Password PostgreSQL database access
-    Type: String
-
 
 
 Resources:
@@ -48,17 +27,35 @@ Resources:
       GroupDescription: Elasticache Security Group
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '11211'
-          ToPort: '11211'
-          SourceSecurityGroupName: !Ref InstanceSecurityGroup
+          FromPort: '6379'
+          ToPort: '6379'
+          CidrIp: 0.0.0.0/0
+          
 
   ElasticacheCluster:
     Type: 'AWS::ElastiCache::CacheCluster'
     Properties:    
-      Engine: memcached
-      CacheNodeType: cache.t2.micro
+      Engine: redis
+      ClusterName: !Ref ElasticCacheName
+      CacheNodeType: cache.r6g.large
       NumCacheNodes: '1'
+      Port: !Ref ElasticCachePort
       VpcSecurityGroupIds:
         - !GetAtt 
           - ElasticacheSecurityGroup
           - GroupId
+        - Fn::ImportValue: !Sub "${EnvironmentName}-AppServerSecurityGroupID"
+
+Outputs: 
+
+    RedisCacheEndpoint:
+        Description: The public url to elastic cache cluster
+        Value: !GetAtt ElasticacheCluster.RedisEndpoint.Address
+        Export:
+          Name: !Sub ${EnvironmentName}-RedisCacheEndpoint-URL
+
+    RedisCacheEndpointPort:
+        Description: The port to elastic cache cluster
+        Value: !GetAtt ElasticacheCluster.RedisEndpoint.Port
+        Export:
+          Name: !Sub ${EnvironmentName}-RedisCacheEndpointPort
