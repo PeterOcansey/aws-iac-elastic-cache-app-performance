@@ -9,7 +9,7 @@
     },
     {
         "ParameterKey": "KeyToUse",
-        "ParameterValue": "WebEc2Key"
+        "ParameterValue": "Your_Key_Here"
     },
     {
         "ParameterKey": "DBUsername",
