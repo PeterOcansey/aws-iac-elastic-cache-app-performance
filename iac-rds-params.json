@@ -9,7 +9,7 @@
     },
     {
         "ParameterKey": "DBName",
-        "ParameterValue": "poelasticcachedb2"
+        "ParameterValue": "database_here"
     },
     {
         "ParameterKey": "DBInstanceClass",
@@ -21,10 +21,10 @@
     },
     {
         "ParameterKey": "DBUsername",
-        "ParameterValue": "dbadmin"
+        "ParameterValue": "user_name_here"
     },
     {
         "ParameterKey": "DBPassword",
-        "ParameterValue": "dbadmin2021"
+        "ParameterValue": "password_here"
     }
 ]
