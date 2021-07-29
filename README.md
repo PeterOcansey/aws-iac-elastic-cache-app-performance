@@ -1,8 +1,22 @@
 ## Improve Application Performance using Amazon ElasticCache
 
 ### Database
-Let's begin by spinning up database for our python application, as per the challenge requirement, we will be using Amazon Relational Database Service (RDS) Postgresql. Amazon RDS makes it easy to set up, operate, and scale a relational database in the cloud.
+- To spin up your database, use `iac-rds-pgsql.yml` and `iac-rds-params.json` files
+- Update values in `iac-rds-params.json` to suite your need
+- From your terminal, execute `bash bash_scripts/create.sh 'your_stack_name_here'  iac-rds-pgsql.yml iac-rds-params.json` to spin up your Amazon RDS PostgreSQL database.
 
-From the terminal, execute
 
-`bash bash_scripts/create.sh 'your_stack_name_here'  iac-rds-pgsql.yml iac-rds-params.json` 
+### Application
+- To spin up your database, use `iac-app-server.yml` and `iac-app-server-params.json` files
+- Update values in `iac-app-server-params.json` to suite your need
+- From your terminal, execute `bash bash_scripts/create.sh 'your_stack_name_here'  iac-app-server.yml iac-app-server-params.json` to spin up your EC2 instance and get your application up and running
+
+
+### Cache
+- To spin up your redis elastic cache cluster, use `iac-elastic-cache.yml` and `iac-elastic-cache-params.json` files
+- Update values in `iac-elastic-cache-params.json` to suite your need
+- From your terminal, execute `bash bash_scripts/create.sh 'your_stack_name_here'  iac-elastic-cache.yml iac-elastic-cache-params.json` to spin up your Redis ElastiCache Cluster up and running
+
+
+
+
